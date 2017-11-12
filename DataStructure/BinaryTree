@@ -1,0 +1,157 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+
+
+#define OVERFLOW -1
+
+typedef char ElementType;
+typedef int Status;
+
+
+struct Node;
+typedef struct Node *PtrNode;
+typedef PtrNode Position;
+typedef PtrNode Tree;
+
+
+typedef struct BitNode
+{
+	ElementType data;
+	struct BitNode *left,*right;
+}BitNode,*BitTree;
+
+
+typedef struct StackNode
+{
+	struct StackNode *next;
+	BitNode *data;
+}StackNode,*Stack;
+
+
+Status CreateTree(BitTree *T){
+	char ch;
+	scanf("%c",&ch);
+    //getchar();
+
+	if(ch == '0'){
+        *T=NULL;
+	}
+	else{
+		*T = (BitTree)malloc(sizeof(BitNode));
+		(*T)->data = ch;
+		CreateTree(&((*T)->left));
+		CreateTree(&((*T)->right));
+	}
+}
+
+
+Status PreorderTree(BitTree *T){
+	if(*T){
+		printf("%c",(*T)->data);
+		PreorderTree(&((*T)->left));
+		PreorderTree(&((*T)->right));
+	}
+}
+
+Status InOrderTree(BitTree *T){
+	if(*T){
+		InOrderTree(&((*T)->left));
+		printf("%c ",(*T)->data);
+		InOrderTree(&((*T)->right));
+	}
+}
+
+
+Status LastOrderTree(BitTree *T){
+	BitNode *root = *T;
+	if(root){
+		LastOrderTree(&(root->left));
+		LastOrderTree(&(root->right));
+		printf("%c ", root->data);
+	}
+}
+
+
+void Push(Stack S,BitTree T){
+	StackNode *new_node = (Stack *)malloc(sizeof(StackNode));
+	if(!new_node)exit(OVERFLOW);
+	new_node->data = T;
+	Stack top_cell = S->next;
+	new_node->next = top_cell;
+	S->next = new_node;
+}
+
+BitTree Pop(Stack S,BitTree P){
+    if(IsEmpty(S))printf("stack is empty can't pop\n");
+	Stack top_cell = S->next;
+	S->next = top_cell->next;
+	P = top_cell;
+	//free(top_cell);
+	return P;
+}
+
+BitTree Top(Stack S,BitTree P){
+	P = S->next->data;
+	return P;
+}
+
+
+int IsEmpty(Stack S){
+	return S->next == NULL;
+}
+
+Stack InitLinkedStack(void){
+	Stack S = (Stack *)malloc(sizeof(StackNode));
+	S->next = NULL;
+	return S;
+}
+
+
+void PrintStack(Stack S){
+    Stack tmp_cell = S->next;
+    while(tmp_cell){
+        printf(" %c",tmp_cell->data->data);
+        tmp_cell = tmp_cell->next;
+    }
+}
+
+Status InOrderTraverse(BitTree T,Stack S){
+	Push(S,T);
+	BitTree P;
+	while(!IsEmpty(S)){
+		while(P =Top(S,P) && P)
+			Push(S,P->left);
+		Pop(S,P);
+		if(!IsEmpty(S)){
+			Pop(S,P);
+			printf("%c ",P->data);
+			Push(S,P->right);
+		}
+	}
+}
+
+
+int main(){
+
+	BitTree T;
+	Stack S;
+	S = InitLinkedStack();
+
+	CreateTree(&T);
+    //Push(S,T);
+    //Push(S,T->left);
+    //PrintStack(S);
+    printf("\n============\n");
+    InOrderTraverse(T,S);
+
+
+	//InOrderTree(&T);
+	//LastOrderTree(&T);
+}
+
+
+/// input text-+a00*b00-c00d00/e00f00
+
+
+
