@@ -19,6 +19,18 @@ struct Node
 	Position next;
 };
 
+struct DNode;
+typedef struct DNode *PtrDNode;
+typedef PtrDNode DList;
+typedef PtrDNode DPosition;
+
+struct DNode
+{
+	ElementType data;
+	DPosition next,prior;
+};
+
+
 
 Position InitList(List L){
 	Position heade_node = malloc(sizeof(struct Node));
@@ -27,6 +39,18 @@ Position InitList(List L){
 	L = heade_node;
 	return L;
 }
+
+
+DPosition InitDList(DList L){
+	DPosition heade_node = malloc(sizeof(struct DNode));
+	if(!heade_node)exit(OVERFLOW);
+	heade_node->next = NULL;
+	heade_node->prior = NULL;
+
+	L = heade_node;
+	return L;
+}
+
 
 
 Position FindPrevious(List L,ElementType X){
@@ -63,6 +87,27 @@ void InsertByPos(List L,int index,ElementType X){
 	tmp_heade->next = new_node;
 
 }
+
+void InsertByPosOfDList(DList L,int index,ElementType X){
+	DPosition tmp_heade = L;
+	int j = 0;
+	while(tmp_heade&&j<index-1){
+		tmp_heade = tmp_heade->next;
+		j++;
+	}
+
+	if(!tmp_heade || j>index-1)exit(OVERFLOW);
+	DPosition new_node = malloc(sizeof(struct DNode));
+	if(!new_node)exit(OVERFLOW);
+	new_node->data = X;
+
+	new_node->next = tmp_heade->next;
+	tmp_heade->next->prior = new_node;
+	new_node->prior = tmp_heade;
+	tmp_heade->next = new_node;
+
+}
+
 
 void DeleteByEle(List L,ElementType X){
 	Position tmp_cell = FindPrevious(L,X);
@@ -104,6 +149,14 @@ void Printer(List L){
 	}
 }
 
+void PrinterDList(DList L){
+	DPosition head = L;
+	while(head->next){
+		head = head->next;
+		printf("%d\n",head->data);
+	}
+}
+
 
 Position LocalReserveList(List L){
 	Position head = L;
@@ -111,7 +164,7 @@ Position LocalReserveList(List L){
 	Position next_node = NULL;
 	Position mid_node = NULL;
 
-	
+	//ÄæÖÃµÚÒ»¸ö½Úµã
 	previous_node = head;
 	mid_node = head->next;
 	next_node = mid_node->next;
@@ -153,15 +206,75 @@ Position MergeList(List La,List Lb,List L){
 }
 
 
+void DeleteAllX(List L,ElementType X){
+	Position cell = L->next;
+	Position pre_cell = L;
+	Position tmp_cell;
+
+	while(cell){
+		if(cell->data == X){
+			tmp_cell = cell;
+			cell = cell->next;
+			pre_cell->next = cell;
+			free(tmp_cell);
+		}else{
+			pre_cell = cell;
+			cell = cell->next;
+		}
+	}
+}
+
+//逆序打印
+void ReservePrint(List L){
+	if(L->next!=NULL)
+		ReservePrint(L->next);
+	printf("%d\n", L->data);
+}
+
+
+//删除最小元素
+Position FindMin(List L){
+	Position previous_node;
+	Position tmp_cell = L;
+    ElementType tmp_val;
+
+	if(tmp_cell->next)
+		tmp_val = tmp_cell->next->data;
+	else
+		exit(0);
+
+	while(tmp_cell->next){
+		if(tmp_cell->next->data<=tmp_val){
+			tmp_val = tmp_cell->next->data;
+			previous_node = tmp_cell;
+		}
+		tmp_cell = tmp_cell->next;
+	}
+
+	return previous_node;
+}
+
+void DeleteMin(List L){
+	Position previous_node = FindMin(L);
+	Position delete_node = previous_node->next;
+	previous_node->next = delete_node->next;
+	free(delete_node);
+}
+
+
+
 int main(){
 	List L;
 	List La;
 	List Lb;
+	DList DL;
 
     La = InitList(La);
     Lb = InitList(Lb);
     L = InitList(L);
+
 	int count;
+
 
 	/*************/
 	InsertByPos(La,1,1);
@@ -169,6 +282,7 @@ int main(){
 	InsertByPos(La,3,3);
 	InsertByPos(La,4,4);
 	InsertByPos(La,5,1);
+	InsertByPos(La,6,2);
 	/************/
 
 	InsertByPos(Lb,1,2);
@@ -185,16 +299,29 @@ int main(){
 	//DeleteByEle(L,4);
 	//DeleteByPos(L,2);
     //LocalReserveList(L);
-    printf("L 1 =%d",L);
 	Printer(La);
 	printf("**************************\n");
-	Lb = LocalReserveList(Lb);
-	Printer(Lb);
-	printf("**************************\n");
+	//Lb = LocalReserveList(Lb);
+	//Printer(Lb);
+	//printf("**************************\n");
 	//L = MergeList(La,Lb,L);
-	//Printer(L);
-    printf("L 1 =%d",L);
+
+
     //printf("length= %d\n",GetLength(L));
+
+	/*******insert Dlist************/
+	/*
+	InsertByPosOfDList(DL,1,1);
+	InsertByPosOfDList(DL,2,2);
+	InsertByPosOfDList(DL,3,3);
+
+	//PrinterDList(DL);
+	*/
+	//DeleteAllX(La,2);
+	//Printer(La);
+	//ReservePrint(La->next);
+	DeleteMin(Lb);
+	Printer(Lb);
 	return 0;
 }
 
