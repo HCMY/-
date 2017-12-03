@@ -32,3 +32,20 @@ void InsertSort(int *arr){//elements' index start from 1, index '0' is length of
         }
 	}
 }
+
+void ShellSort(int *arr){
+    const int length = arr[0];
+    int dk;
+    int i,j;
+
+    for(dk=length/2;dk>=1;dk/=2){
+    	for(i=dk+1;i<=length;i++){
+    		if(arr[i]<arr[i-dk]){
+    			arr[0] = arr[i];
+    		for(j=i-dk;j>0&&arr[0]<arr[j];j-=dk)
+    			arr[j+dk] = arr[j];
+    		arr[j+dk] = arr[0];
+    		}
+    	}
+    }
+}
