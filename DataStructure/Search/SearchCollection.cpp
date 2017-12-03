@@ -49,3 +49,30 @@ void ShellSort(int *arr){
     	}
     }
 }
+
+
+/**
+*Quick Sort
+*/
+
+int Partition(int *arr,int low,int high){
+	int pivot = arr[low];
+	while(low<high){
+		while(low<high && arr[high]>=pivot) high--;
+		arr[low] = arr[high];
+		while(low<high && arr[low]<=pivot) low++;
+		arr[high] = arr[low];
+	}
+	arr[low] = pivot;
+	return low;
+}
+
+
+void QuickSort(int *arr,int low,int high){
+	int pos;
+	if(low<high){
+        pos = Partition(arr,low,high);
+        QuickSort(arr,low,pos-1);
+        QuickSort(arr,pos+1,high);
+	}
+}
