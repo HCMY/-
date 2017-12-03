@@ -76,3 +76,24 @@ void QuickSort(int *arr,int low,int high){
         QuickSort(arr,pos+1,high);
 	}
 }
+
+
+/** Select Sort*/
+void Swap(int *a,int *b){
+	int tmp;
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void NormalSelect(int *arr,int length){
+	int min,i;
+	for(i=0;i<length;i++){
+		min = i;
+		for(int j=i+1;j<length;j++)
+			if(arr[j]<arr[min])
+				min = j;
+		if(min!=i)
+			Swap(&arr[min],&arr[i]);
+	}
+}
