@@ -97,3 +97,34 @@ void NormalSelect(int *arr,int length){
 			Swap(&arr[min],&arr[i]);
 	}
 }
+
+
+
+/********************Merge Sort************************/
+
+// index start from 1
+void Merge(int *arr,const int low,const int mid,const int high){
+	int *tmp_arr = new int[high];
+	int i,j,k;
+
+	for(int h=low;h<=high;h++)
+		tmp_arr[h] = arr[h];
+	for(i=low,j=mid+1,k=i;i<=mid&&j<=high;k++){
+		if(tmp_arr[i]<=tmp_arr[j])
+			arr[k] = tmp_arr[i++];
+		else
+			arr[k] = tmp_arr[j++];
+	}
+	while(i<=mid) arr[k++] = tmp_arr[i++];
+	while(j<=high) arr[k++] = tmp_arr[j++];
+}
+
+void MergeSort(int *arr,int low,int high){
+	if(low<high){
+		int mid = (low+high)/2;
+		MergeSort(arr,low,mid);
+		MergeSort(arr,mid+1,high);
+		Merge(arr,low,mid,high);
+	}
+}
+
