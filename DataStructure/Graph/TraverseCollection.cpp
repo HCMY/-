@@ -29,3 +29,22 @@ void BFSTraverse(Graph &G){
 		if(!visted[i])
 			BFS(G,i);
 }
+
+
+
+
+void DFS(Graph &G,int v){
+	visted[v] = true;
+	for(int w=FirstNeihber(G,v);w>=0;w=NextNeighbor(G,v,w))
+		if(!visted[v])
+			DFS(G,v);
+}
+
+
+void DFSTraverse(Graph &G){
+	for(int v=0;v<G.vexnum;v++)
+		visted[v] = false;
+	for(int v=0;v<G.vexnum;v++)
+		if(!visted[v])
+			DFS(G,v);
+}
