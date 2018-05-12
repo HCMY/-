@@ -1,4 +1,8 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <algorithm>
+#include <iostream>
 
 template <typename Object>
 
@@ -16,18 +20,18 @@ public:
 	_the_capacity(rhs._the_capacity), _objects(nullptr)
 	{
 		_objects = new Object[_the_capacity];
-		for(int k=0;k<_the_size;k++){
+		for(int k=0; k<_the_size; k++){
 			_objects[k] = rhs._objects[k];
 		}
 	}
 
-	Vector operator=(const Vector& rhs){
+	Vector &operator=(const Vector &rhs){
 		Vector copy = rhs;
-		std::swap(*this, rhs);
+		std::swap(*this, copy);
 		return *this;
 	}
 
-	~Vector(){delete []_objects;}
+	~Vector(){delete [] _objects;}
 
 	Vector(Vector && rhs):_the_size(rhs._the_size),
 	_the_capacity(rhs._the_capacity), _objects(rhs._objects){
@@ -36,7 +40,7 @@ public:
 		rhs._the_capacity = 0;
 	}
 
-	Vector operator=(Vector && rhs){
+	Vector &operator=(Vector && rhs){
 		std::swap(_the_size, rhs._the_size);
 		std::swap(_the_capacity, rhs._the_capacity);
 		std::swap(_objects, rhs._objects);
@@ -61,7 +65,7 @@ public:
 		delete []new_array;
 	}
 
-	Object operator[](int index){
+	Object &operator[](int index){
 		return _objects[index];
 	}
 
@@ -108,3 +112,5 @@ private:
 
 };
 
+
+#endif
