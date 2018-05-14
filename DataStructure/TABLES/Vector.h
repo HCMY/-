@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <iostream>
+#include<stdexcept>
+#include "dsexceptions.h"
 
 template <typename Object>
 
