@@ -117,7 +117,9 @@ public:
 	iterator end() {return tail;}
 	const_iterator end() const {return tail;}
 
-
+	iterator erase(iterator itr){}
+	iterator erase(iterator from, iterator to){}
+	
 	void pop_front() {return 0;}
 	void push_back() {return 0;}
 
