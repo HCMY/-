@@ -1,10 +1,6 @@
 #include<iostream>
-using namespace std;
 
 template <typename Object>
-
-
-
 class List
 {
 
@@ -26,22 +22,22 @@ public:
 	public:
 		const_iterator():current(nullptr) {}
 
-		const Object & opetator* () const
-            {return retrieve();}
+		const Object & operator*() const
+            { return retrieve();}
 
-		const_iterator &opetator++() {
+		const_iterator &operator++() {
 			current = current->next;
 			return *this;
 		}
 
-		const_iterator opetator++(int){
+		const_iterator operator++(int){
 			const_iterator old = *this;
 			++(*this);
 			return old;
 		}
 
-		bool opetator==(const const_iterator &rhs) const {return current==rhs.current;}
-		bool opetator!=(const const_iterator &rhs) const {return !(*this==rhs);}
+		bool operator==(const const_iterator &rhs) const {return current==rhs.current;}
+		bool operator!=(const const_iterator &rhs) const {return !(*this==rhs);}
 
 
 		~const_iterator();
@@ -57,11 +53,38 @@ public:
 		friend class List<Object>;
 	};
 
+	class iterator: public const_iterator
+	{
+	public:
+		iterator() {};
+		~iterator() {};
+
+		Object &operator*()
+		{return const_iterator::retrieve();}
+
+		const Object &operator*() const
+		{return const_iterator::operator*();}
+
+		iterator &operator++(){
+			this->current = this->current->next;
+			return *this;
+		}
+
+		iterator operator++(int){
+			iterator old = *this;
+			++(*this);
+			return old;
+		}
+
+	protected:
+		iterator(Node *p):const_iterator(p) {}
+		friend class List<Object>;
+
+	};
+
 public:
 	List();
 	~List();
 
-
 };
-
 
