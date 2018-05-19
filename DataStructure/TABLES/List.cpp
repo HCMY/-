@@ -83,8 +83,64 @@ public:
 	};
 
 public:
-	List();
-	~List();
+	List() { init();}
+	List(const List &rhs){
+		init();
+		for(auto &x:rhs)
+			push_back(x);
+	}
+
+	~List(){
+		clear();
+		delete head;
+		delete tail;
+	}
+
+
+	int size() const{ return the_size;}
+	bool empty() const{return size()==0;}
+
+	void clear(){
+		while(!empty())
+			pop_front();
+	}
+
+
+	List &operator=(const List &rhs){
+		List copy = rhs;
+		std::swap(*this, copy);
+		return *this;
+	}
+
+	iterator begin() {return head->next;}
+	const_iterator begin() const {return head->next;}
+	iterator end() {return tail;}
+	const_iterator end() const {return tail;}
+
+
+	void pop_front() {return 0;}
+	void push_back() {return 0;}
+
+
+
+
+
+
+
+
+
+private:
+	int the_size;
+	Node *head;
+	Node *tail;
+
+	void init(){
+		the_size = 0;
+		head = new Node;
+		tail = new Node;
+		head->next = tail;
+		tail->prev = head;
+	}
 
 };
 
