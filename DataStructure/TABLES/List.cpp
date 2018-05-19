@@ -119,10 +119,40 @@ public:
 
 	iterator erase(iterator itr){}
 	iterator erase(iterator from, iterator to){}
-	
-	void pop_front() {return 0;}
-	void push_back() {return 0;}
+	iterator insert(iterator itr, const Object &x){}
 
+
+	void pop_front() {
+		erase(begin());
+	}
+
+	void pop_back(){
+		erase(--end());
+	}
+
+	void push_front(const Object &x){
+		insert(begin(), x);
+	}
+
+	void push_back(const Object &x) {
+			insert(end(), std::move(x));
+	}
+
+	Object &front(){
+		return *begin();
+	}
+
+	const Object &front() const {
+		return *begin(); 
+	}
+
+	Object &back(){
+		return *--end();
+	}
+
+	const Object &back(){
+		return *--end();
+	}
 
 
 
