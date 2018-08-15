@@ -19,14 +19,21 @@ public:
 	BinarySearchTree(BinarySearchTree && rhs);
 	~BinarySearchTree();
 
-	const Comparable &findMin() const; //read only
+	const Comparable &findMin() const{//read only
+		if(isEmpty())
+			throw ///TODO
+		return findMin(root)->element;
+
+	}
 	const Comparable &findMax() const;
 	
 	bool contains(const Comparable &x) const{
 		return contains(x, root);
 	}
 
-	bool isEmpty() const;
+	bool isEmpty() const{
+		return root==nullptr;
+	}
 	void printTree(ostream &out=cout) const;
 
 	void makeEmpty();
@@ -61,8 +68,24 @@ private:
 	void insert(const Comparable &x, BinaryNode *&t);
 	void insert(const Comparable &&x, BinaryNode *&t);
 	void remove(const Comparable &x, BinaryNode *&t);
-	BinaryNode *findMin(BinaryNode *t) const;
-	BinaryNode *findMax(BinaryNode *&t) const;
+	
+	BinaryNode *findMin(BinaryNode *t) const{
+		if(t==nullptr)
+			return nullptr;
+		if(t->left==nullptr)
+			return t;
+		return findMin(t->left);
+	}
+	
+	///注意，此处只用了指针的copy，也就是方法内部不能修改原来的指针
+	BinaryNode *findMax(BinaryNode *t) const{
+		if(t != nullptr){
+			while(t->right!=nullptr)
+				t = t->right;
+		}
+
+		return t;
+	}
 	
 	bool contains(const Comparable &x, BinaryNode *t) const{
 		if(t == nullptr)
